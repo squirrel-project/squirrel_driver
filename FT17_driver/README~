@@ -1,7 +1,7 @@
 How to install the FT17 driver
 ------------------------------
 
-Execute in 32-bit or 64-bit:
+Execute:
 
 ./install.sh
 
