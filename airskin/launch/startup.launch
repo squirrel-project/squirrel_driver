@@ -1,5 +1,5 @@
 <launch>
-  <arg name="device" default="/dev/ttyACM0" />
+  <arg name="device" default="/dev/ttyAirskin" />
   <node pkg="airskin" type="airskin" name="airskin" output="screen">
     <param name="device" value="$(arg device)" />
   </node>

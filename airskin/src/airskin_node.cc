@@ -108,10 +108,12 @@ public:
         ((I2C_Master_Devantech_ISS*)i2c_master)->GetFirmwareVersion(),
         ((I2C_Master_Devantech_ISS*)i2c_master)->GetSerialNumber().c_str());
     // HACK: hardcoded addresses
-    addrs.push_back(2*0x6);
-    addrs.push_back(2*0x8);
     addrs.push_back(2*0x4);
     addrs.push_back(2*0x5);
+    addrs.push_back(2*0x6);
+    addrs.push_back(2*0x7);
+    addrs.push_back(2*0x8);
+    addrs.push_back(2*0x9);
     for(size_t i = 0; i < addrs.size(); i++)
     {
       sensors.push_back(new AirSkin_Sense(i2c_master, addrs[i]));

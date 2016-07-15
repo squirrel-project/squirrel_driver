@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package>
+  <name>squirrel_arm</name>
+  <version>0.0.0</version>
+  <description>The squirrel_arm package contains a node that takes keyboard 
+               input to manually move all 6 axis (arm + base) of the SQUIRREL 
+               robot. </description>
+
+  <maintainer email="markus.bajones@gmail.com">Markus 'Bajo' Bajones</maintainer>
+
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+<!--  
+  TODO:
+  Uncomment as soon as these packages have landed in the repositories.
+  <run_depend>uibk_arm_controller</run_depend> 
+  <run_depend>python-readchar</run_depend>
+-->
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+
+</package>
