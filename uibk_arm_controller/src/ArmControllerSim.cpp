@@ -57,6 +57,7 @@
 #include <chrono>
 #include <thread>
 #include <uibk_arm_controller/arm_controller.hpp>
+//#include <uibk_robot_driver/arm_controller.hpp>
 
 using namespace std;
 
@@ -77,10 +78,11 @@ void ArmController::PosCommandSub_cb(const std_msgs::Float64MultiArray msg){
 
   double target = base->getCurrentState();
   //vector<double> current_pose = base->getCurrentPose();
-  //double cx = current_pose.at(0);
-  //double cy = current_pose.at(1);
+  //double ctheta = current_pose.at(0); ??
+  //double cx = current_pose.at(1); ??
+  //double cy = current_pose.at(2); ??
 
-  base->move(target+msg.data[0]);
+  base->move(target+msg.data[0]); //  base->move(ctheta+msg.data[0], cx+msg.data[1], cx+msg.data[2]); //command ( x y theta joint1 joint2 joint3 joint4 joint5 )???
 
   ArmPosCommandPub_ = nh_.advertise<std_msgs::Float64MultiArray>("joint_group_position_controller/command", 1);
   std_msgs::Float64MultiArray joint_pos;
