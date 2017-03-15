@@ -16,5 +16,7 @@ before_install:
   - bash .travis.install.sh
 install:
   - git clone https://github.com/ros-industrial/industrial_ci.git .ci_config
+before_script:
+  - bash .travis.install.sh
 script: .ci_config/travis.sh
 #  - source ./travis.sh  # Enable this when you have a package-local script 
