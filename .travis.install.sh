@@ -2,7 +2,8 @@ set -e
 set -v
 
 echo "BEFORE INSTALL IS RUNNING"
-sudo echo "deb http://doc.openrobotino.org/download/packages/amd64 ./" | sudo tee -a /etc/apt/sources.list
-sudo apt-get update
-sudo apt-key update
-sudo apt-get install -qq -y --force-yes robotino-api2
+echo "deb http://doc.openrobotino.org/download/packages/amd64 ./" | tee /etc/apt/sources.list.d/openrobotino.list
+apt-get update
+apt-get install -qq -y --force-yes robotino-api2
+
+sh ft17_driver/install.sh
