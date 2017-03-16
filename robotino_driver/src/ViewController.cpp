@@ -165,8 +165,8 @@ bool ViewController::fixatePanTilt(robotino_msgs::FixatePanTilt::Request &req,
     joint_mutex_.lock();
     movePanTilt(req.pan, req.tilt);
     joint_mutex_.unlock();
-    if (!req.why.empty())
-      who_fixed_it = req.why;
+    if (!req.reason.empty())
+      who_fixed_it = req.reason;
     else
       who_fixed_it = "*";
     return true;
@@ -183,17 +183,17 @@ bool ViewController::clearFixation(robotino_msgs::ClearFixation::Request &req,
 {
   if (!who_fixed_it.empty())
   {
-    std::string why = req.why;
-    if (why.empty())
-      why = "*";
-    if (who_fixed_it == req.why)
+    std::string reason = req.reason;
+    if (reason.empty())
+      reason = "*";
+    if (who_fixed_it == req.reason)
     {
       who_fixed_it = "";
       return true;
     }
     else
     {
-      ROS_INFO("view was fixed by '%s', but you are '%s', ignoring", who_fixed_it.c_str(), req.why.c_str());
+      ROS_INFO("view was fixed by '%s', but you are '%s', ignoring", who_fixed_it.c_str(), req.reason.c_str());
       return false;
     }
   }
