@@ -17,6 +17,7 @@
   <run_depend>robotino_driver</run_depend>
   <run_depend>robotino_safety</run_depend>
   <run_depend>robotino_teleop</run_depend>
+  <run_depend>squirrel_safety</run_depend>
   <run_depend>squirrel_sensing_node</run_depend>
   <run_depend>squirrel_softhand</run_depend>
   <run_depend>uibk_robot_driver</run_depend>
