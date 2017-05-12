@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <name>squirrel_safety</name>
+  <version>0.0.0</version>
+  <description>The squirrel_safety package</description>
+
+  <maintainer email="philipp.zech@uibk.ac.at">Philipp Zech</maintainer>
+
+  <license>TODO</license>
+
+  <author> email="philipp.zech@uibk.ac.at">Philipp Zech</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_depend>squirrel_safety_msgs</build_depend>
+
+</package>

@@ -1,0 +1,7 @@
+<launch>
+    <rosparam param="motor_port">/dev/ttyArm</rosparam>
+    <rosparam param="joints">[base_joint_x, base_joint_y, base_joint_z, arm_link1, arm_link2, arm_link3, arm_link4, arm_link5]</rosparam>
+
+    <node name="squirrel_control_node" pkg="squirrel_control" type="squirrel_control_hw_main" output="screen" respawn="true"/>
+
+</launch>
