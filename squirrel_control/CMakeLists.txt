@@ -109,6 +109,12 @@ target_link_libraries(${PROJECT_NAME}_hw_main
         ${catkin_LIBRARIES}
         )
 
+add_executable(arm_controller_sim src/ArmControllerSim.cpp)
+add_dependencies(arm_controller_sim ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} squirrel_hw_interface)
+target_link_libraries(arm_controller_sim
+  ${catkin_LIBRARIES}
+  squirrel_hw_interface
+)
 #############
 ## Install ##
 #############
