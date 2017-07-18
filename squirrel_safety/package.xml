@@ -14,5 +14,6 @@
 
   <build_depend>rospy</build_depend>
   <build_depend>squirrel_safety_msgs</build_depend>
+  <build_depend>catkin_pkg</build_depend>
 
 </package>
