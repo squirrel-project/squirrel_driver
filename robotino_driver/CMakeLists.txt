@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   dynamixel_msgs
   geometry_msgs
   sensor_msgs
+  squirrel_view_controller_msgs
   std_msgs
 )
 
@@ -22,7 +23,7 @@ find_package(RobotinoAPI2 REQUIRED)
 
 catkin_package(
  INCLUDE_DIRS include
- CATKIN_DEPENDS nav_msgs robotino_msgs std_srvs dynamixel_controllers dynamixel_msgs geometry_msgs image_transport pcl_conversions pcl_ros sensor_msgs std_msgs tf
+ CATKIN_DEPENDS nav_msgs robotino_msgs std_srvs squirrel_view_controller_msgs dynamixel_controllers dynamixel_msgs geometry_msgs image_transport pcl_conversions pcl_ros sensor_msgs std_msgs tf
 )
 
 include_directories(

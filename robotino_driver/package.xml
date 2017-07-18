@@ -37,9 +37,9 @@
   <run_depend>robotino-api2</run_depend>
   <run_depend>std_srvs</run_depend>
   <run_depend>dynamixel_msgs</run_depend>
+  <run_depend>squirrel_view_controller_msgs</run_depend>
   <run_depend>dynamixel_controllers</run_depend>
   <run_depend>robotino_msgs</run_depend>
-  <run_depend>squirrel_view_controller_msgs</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
 
