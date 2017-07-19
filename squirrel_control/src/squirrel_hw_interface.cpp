@@ -395,13 +395,15 @@ namespace squirrel_control {
   void SquirrelHWInterface::write(ros::Duration &elapsed_time) {
     //This for that the robot keeps its initial pose and does not move back to 0 (deault initialization of C++ for class members)
     if (hold) {
+      auto base_state = base_controller_.getCurrentState();
+      
       joint_position_command_ = joint_position_;
       joint_effort_command_ = joint_effort_;
       joint_velocity_command_ = joint_velocity_;
 
-      joint_position_command_[0] = 0.0;
-      joint_position_command_[1] = 0.0;
-      joint_position_command_[2] = 0.0;
+      joint_position_command_[0] = base_state[0];
+      joint_position_command_[1] = base_state[1];
+      joint_position_command_[2] = base_state[2];
 
       joint_effort_command_[0] = 0.0;
       joint_effort_command_[1] = 0.0;
@@ -413,19 +415,22 @@ namespace squirrel_control {
 
       hold = false;
     }
-    
-    enforceLimits(elapsed_time);    
+    //TODO: check base limits in URDF
+    //enforceLimits(elapsed_time);    
     std::vector<double> cmds(5);
+    std::vector<double> base_cmds(3);
     geometry_msgs::Twist twist;
     
     switch(current_mode_){
     case control_modes::POSITION_MODE:
+      for(int i=0; i < 3; i++) {
+	base_cmds[i] = joint_position_command_[i];
+      }
       for(int i = 0; i < num_joints_-3; i++){
 	cmds[i] = joint_position_command_[i+3];
       }
       break;
     case control_modes::VELOCITY_MODE:
-      //TODO assumption: angular is for base velocity control
       twist.linear.x = joint_velocity_command_[0];
       twist.linear.y = joint_velocity_command_[1];
       twist.linear.z = 0.0;
@@ -456,7 +461,7 @@ namespace squirrel_control {
       if (!safety_lock_) {
         motor_interface_->write(cmds);
         if (current_mode_ == control_modes::POSITION_MODE) {
-         base_controller_.moveBase(joint_position_command_[0], joint_position_command_[1], joint_position_command_[2]);
+	  base_controller_.moveBase(base_cmds.at(0), base_cmds.at(1), base_cmds.at(2));
         } else {
           base_interface_.publish(twist);
         }

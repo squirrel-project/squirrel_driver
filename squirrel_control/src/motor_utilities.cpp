@@ -39,9 +39,9 @@ namespace motor_control {
 	comm = packet_handler_->Write1ByteTxRx(port_handler_, motor.id,
 					motor.tool->ctrl_table_["operating_mode"]->address,
 					(UINT8_T)current_mode_, &error);
-	throw_control_error(comm ,
-			    "Failed to switch motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_
-			    << ") into mode " << mode);
+	if(comm != 0) {
+	  std::cout << "Failed to switch motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ") into mode " << mode << std::endl;
+	}
       }
       motor_lock_.unlock();
     } catch (std::exception &ex) {
@@ -113,7 +113,9 @@ namespace motor_control {
     for(auto const& motor: motors_) {
       std::cout << "Starting motor " << static_cast<int>(motor.id)<< std::endl;
       comm = packet_handler_->Write2ByteTxRx(port_handler_, motor.id, motor.tool->ctrl_table_["external_port_data_1"]->address, 4095, &error);
-      throw_control_error(comm, "Failed to loosen brakes for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")");
+      if(comm != 0) {
+	std::cout << "Failed to loosen brakes for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+      }
     }
     motors_ready_ = true;
     std::cout << "Motors started." << std::endl;
@@ -126,7 +128,9 @@ namespace motor_control {
     int comm = 0;
     for(auto const& motor: motors_) {
       comm = packet_handler_->Write2ByteTxRx(port_handler_, motor.id, motor.tool->ctrl_table_["external_port_data_1"]->address, 0, &error);
-      throw_control_error(comm, "Failed to set brakes for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")");
+      if(comm != 0) {
+	std::cout << "Failed to set brakes for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+      }
     }
     motors_ready_ = false;
     disableTorque();
@@ -139,7 +143,9 @@ namespace motor_control {
     int comm = 0;
     for(auto const& motor: motors_) {
       comm = packet_handler_->Write1ByteTxRx(port_handler_, motor.id, motor.tool->ctrl_table_["torque_enable"]->address, 1, &error);
-      throw_control_error(comm, "Failed to enable torque for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")");
+      if(comm != 0) {
+	std::cout << "Failed to enable torque for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+      }
     }
     torque_enabled_ = true;
     return true;
@@ -151,7 +157,9 @@ namespace motor_control {
     int comm = 0;
     for(auto const& motor: motors_) {
       comm = packet_handler_->Write1ByteTxRx(port_handler_, motor.id, motor.tool->ctrl_table_["torque_enable"]->address, 0, &error);
-      throw_control_error(comm, "Failed to disable torque for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")");
+      if(comm != 0) {
+	std::cout << "Failed to disable torque for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+      }
     }
     torque_enabled_ = false;
     return true;
@@ -194,9 +202,9 @@ namespace motor_control {
 	  comm = packet_handler_->Read4ByteTxRx(port_handler_, motor.id,
 					 motor.tool->ctrl_table_["velocity_limit"]->address,
 					 &velocity_limit, &error);
-	  throw_control_error(comm, "Failed to read velocity limit for motor " << static_cast<int>(motor.id) << " ("
-			      << motor.tool->model_name_
-			      << ")");
+	  if(comm != 0) {
+	    std::cout << "Failed to read velocity limit for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+	  }
 	  UINT32_T commanded_velocity = (UINT32_T)commands.at(i);
 	  throw_control_error( commanded_velocity > velocity_limit,
 			       "Motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_
@@ -212,9 +220,9 @@ namespace motor_control {
 	  comm = packet_handler_->Read2ByteTxRx(port_handler_, motor.id,
 					 motor.tool->ctrl_table_["torque_limit"]->address,
 					 &torque_limit, &error);
-	  throw_control_error(comm, "Failed to read torque limit for motor " << static_cast<int>(motor.id) << " ("
-			      << motor.tool->model_name_
-			      << ")");
+	  if(comm != 0) {
+	    std::cout << "Failed to read torque limit for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+	  }
 	  UINT16_T commanded_torque = (UINT16_T)commands.at(i);
 	  throw_control_error( commanded_torque > torque_limit,
 			       "Motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_
@@ -229,8 +237,9 @@ namespace motor_control {
 	  throw_control_error(true, "Unknown mode: " << current_mode_);
 	}
 	//this theoretically should never be evaluated, but for sake of completeness...
-	throw_control_error(comm, "Failed to command motor " << static_cast<int>(motor.id) << 
-			    " (" << motor.tool->model_name_ << ") in mode " << current_mode_);
+	if(comm != 0){
+	  std::cout << "Failed to command motor " << static_cast<int>(motor.id) <<  " (" << motor.tool->model_name_ << ") in mode " << current_mode_ << std::endl;
+	}
 	i++;
       }
     } catch(const std::exception &ex) {
@@ -261,7 +270,9 @@ namespace motor_control {
 	  comm = packet_handler_->Read4ByteTxRx(port_handler_, motor.id,
 					 motor.tool->ctrl_table_["present_position"]->address,
 					 &value, &error);
-	  throw_control_error(comm, "Error reading position for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")");
+	  if(comm != 0) {
+	    std::cout << "Error reading position for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+	  }
 	  double rad_per_tick = motor.tool->max_radian_ / motor.tool->value_of_max_radian_position_;
 	  int real_value = static_cast<int>(value);
 	  positions.push_back(double(real_value*rad_per_tick));
@@ -277,7 +288,9 @@ namespace motor_control {
 	  comm = packet_handler_->Read4ByteTxRx(port_handler_, motor.id,
 					 motor.tool->ctrl_table_["present_velocity"]->address,
 					 &value, &error);
-	  throw_control_error(comm, "Error reading velocity for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")");
+	  if(comm != 0) {
+	    std::cout << "Error reading velocity for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+	  }
 	  velocities.push_back(double(value));
 	}
 	return velocities;
@@ -290,7 +303,9 @@ namespace motor_control {
 	  comm = packet_handler_->Read2ByteTxRx(port_handler_, motor.id,
 					 motor.tool->ctrl_table_["present_current"]->address,
 					 &value, &error);
-	  throw_control_error(comm, "Error reading torque for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")");
+	  if(comm != 0) {
+	    std::cout << "Error reading torque for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
+	  }
 	  torques.push_back(abs(double(value)*CURRENT_TO_TORQUE_RATIO_));
 	}
 	return torques;
