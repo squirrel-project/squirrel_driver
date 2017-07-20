@@ -8,7 +8,7 @@ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 sudo apt-get update -qq > /dev/null 2>&1
 sudo apt-get install -qq -y python-rosdep python-wstool python-catkin-pkg
 sudo apt-get install -qq -y ros-${CI_ROS_DISTRO}-ros > /dev/null 2>&1
-sudo pip install catkin_pkg
+pip install catkin_pkg
 sudo rosdep init
 rosdep update
 
