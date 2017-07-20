@@ -98,6 +98,7 @@ target_link_libraries(squirrel_hw_interface
         motor_utilities
         ${catkin_LIBRARIES}
         )
+add_dependencies(squirrel_hw_interface squirrel_safety_msgs_gencpp)
 
 # Main control executables
 
