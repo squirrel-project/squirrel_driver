@@ -7,11 +7,12 @@ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 sudo apt-get update -qq > /dev/null 2>&1
 pip install catkin_pkg
-sudo apt-get install -qq -y python-rosdep python-wstool > /dev/null 2>&1
+python -m pip install empy
+sudo apt-get install -qq -y python-rosdep python-wstool python-catkin-pkg ros-indigo-catkin ros-indigo-catkin-pip > /dev/null 2>&1
 sudo apt-get install -qq -y ros-${CI_ROS_DISTRO}-ros > /dev/null 2>&1
 sudo rosdep init
 rosdep update
-python -m pip install empy
+
 ## SQUIRREL SPECIFIC ##
 wget http://doc.openrobotino.org/download/packages/amd64/robotino-api2_0.9.16_amd64.deb
 sudo dpkg -i robotino-api2_0.9.16_amd64.deb
