@@ -6,4 +6,4 @@ wget http://doc.openrobotino.org/download/packages/amd64/robotino-api2_0.9.16_am
 dpkg -i /tmp/robotino.deb
 
 apt-get install dpkg
-dpkg -i $CATKIN_WORKSPACE/src/ft17_driver/ft17driver_0.0-1_x86_64.deb
+dpkg -i $CATKIN_WORKSPACE/src/squirrel_driver/ft17_driver/ft17driver_0.0-1_x86_64.deb
