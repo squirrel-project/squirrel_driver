@@ -28,9 +28,9 @@ namespace squirrel_control {
         //    private_nh.param("baseControl/integral_y_max", i_y_max_, 0.8);
         //    private_nh.param("baseControl/integral_y_min", i_y_min_, -0.8);
 
-        private_nh.param("baseControl/vel_ang_max", vel_ang_max_, 0.2);
-        private_nh.param("baseControl/vel_x_max", vel_x_max_, 0.2);
-        private_nh.param("baseControl/vel_y_max", vel_y_max_, 0.2);
+        private_nh.param("baseControl/vel_ang_max", vel_ang_max_, 0.5);
+        private_nh.param("baseControl/vel_x_max", vel_x_max_, 0.5);
+        private_nh.param("baseControl/vel_y_max", vel_y_max_, 0.5);
 
         pid_theta_.initPid(p_theta_, 0.0,0.0,0.0,0.0);
         pid_x_.initPid(p_x_, 0.0,0.0,0.0,0.0);

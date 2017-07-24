@@ -30,14 +30,14 @@
     <param name="hostname" value="$(arg hostname)" />
   </node>
 
-  <!--include file="$(find robotino_bringup)/launch/twist_mux.launch" >
+  <include file="$(find robotino_bringup)/launch/twist_mux.launch" >
     <arg name="robot" value="$(arg robot)" />
-  </include-->
+  </include>
 
 
   <group ns="arm">
     <node name="squirrel_control_node" pkg="squirrel_control" type="squirrel_hw_main" output="screen" respawn="true">
-      <remap from="/cmd_rotatory" to="/cmd_vel"/>
+      <!--remap from="/cmd_rotatory" to="/cmd_vel"/-->
    </node>
     
     <!-- Load controller settings -->

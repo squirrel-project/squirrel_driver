@@ -8,7 +8,7 @@
 #include <control_toolbox/pid.h>
 #include <tf/tf.h>
 #include <vector>
-#define ROBOTINO_MOVE_TOPIC "cmd_rotatory"
+#define ROBOTINO_MOVE_TOPIC "/cmd_rotatory"
 #define ROBOTINO_ODOM_TOPIC "/odom"
 #define DONTCARE nan("1")
 
