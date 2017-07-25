@@ -11,7 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
 ###################################
 
 catkin_package(
+  CATKIN_DEPENDS roscpp serial
   INCLUDE_DIRS include
+  LIBRARIES idmind_serial
 )
 
 ###########
@@ -19,9 +21,16 @@ catkin_package(
 ###########
 
 include_directories(include ${catkin_INCLUDE_DIRS})
-
 add_library(idmind_serial src/${PROJECT_NAME}/idmind_serial.cpp)
+target_link_libraries(idmind_serial)
 
-add_dependencies(idmind_serial ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+###########
+## Install ##
+###########
+install(DIRECTORY include/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-target_link_libraries(idmind_serial ${catkin_LIBRARIES})
+install(TARGETS idmind_serial
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
