@@ -41,7 +41,7 @@ install(TARGETS FT17_driver
 )
 
 install(PROGRAMS common/lib/${MYARCH}/libFT17_driver.so
-  DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  DESTINATION ${CATKIN_GLOBAL_LIB_DESTINATION}
 )
 
 install(DIRECTORY common/include/FT17
