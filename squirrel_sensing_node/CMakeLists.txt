@@ -33,6 +33,7 @@ add_executable(sensing src/main.cpp
 
 target_link_libraries(sensing 
 			${catkin_LIBRARIES})
+add_dependencies(sensing ft17_driver)
 
 install(DIRECTORY doc
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
