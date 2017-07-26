@@ -24,15 +24,19 @@ add_message_files(
 generate_messages(
   DEPENDENCIES
   std_msgs
-  geometry_msgs
 )
 
 ###################################
 ## catkin specific configuration ##
 ###################################
 
-catkin_package(CATKIN_DEPENDS message_runtime std_msgs)
-
+catkin_package(
+       INCLUDE_DIRS include
+       CATKIN_DEPENDS
+       std_msgs
+       message_runtime
+       geometry_msgs
+       )
 
 ###########
 ## Build ##
