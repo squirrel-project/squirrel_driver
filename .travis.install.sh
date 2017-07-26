@@ -6,18 +6,17 @@ while true; do echo "INSTALL IS RUNNING" && sleep 60; done&
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 sudo apt-get update -qq > /dev/null 2>&1
-sudo apt-get install -qq -y python-rosdep python-wstool > /dev/null 2>&1
-sudo apt-get install -qq -y ros-${CI_ROS_DISTRO}-ros > /dev/null 2>&1 #needed as long as https://github.com/ros-infrastructure/rosdep/issues/430 is not fixed
+pip install catkin_pkg
+python -m pip install empy
+sudo apt-get install -qq -y python-rosdep python-wstool python-catkin-pkg ros-indigo-catkin ros-indigo-catkin-pip > /dev/null 2>&1
+sudo apt-get install -qq -y ros-${CI_ROS_DISTRO}-ros > /dev/null 2>&1
 sudo rosdep init
 rosdep update
 
 ## SQUIRREL SPECIFIC ##
-#sudo sh -c 'echo "deb http://packages.openrobotino.org/trusty trusty main" > /etc/apt/sources.list.d/openrobotino.list'
-#sudo sh -c 'echo "deb http://doc.openrobotino.org/download/packages/amd64 ./" > /etc/apt/sources.list.d/openrobotino.list'
-sudo apt-get update
-#sudo apt-get -qq -y --force-yes install robotino-api2
 wget http://doc.openrobotino.org/download/packages/amd64/robotino-api2_0.9.16_amd64.deb
 sudo dpkg -i robotino-api2_0.9.16_amd64.deb
+
 # create empty underlay workspace
 mkdir -p $CATKIN_WS_UNDERLAY_SRC
 source /opt/ros/$CI_ROS_DISTRO/setup.bash > /dev/null 2>&1 # source release
