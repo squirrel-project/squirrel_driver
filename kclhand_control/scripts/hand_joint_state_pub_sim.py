@@ -52,7 +52,7 @@ class send_joint_state(object):
 
         rospy.Subscriber("hand_joint_state_pub", Float64MultiArray, self.sensor_call_back)
         fingertip_data = rospy.Publisher('fingertip_state', Float64MultiArray, queue_size=10)
-        joint_displacement_array = rospy.Publisher('hand_controller/joint_group_position_controller/command', Float64MultiArray, queue_size=10)
+        joint_displacement_array = rospy.Publisher('joint_group_position_controller/command', Float64MultiArray, queue_size=10)
 
         data_send = Float64MultiArray()
         displacement_send = Float64MultiArray()

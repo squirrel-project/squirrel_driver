@@ -85,7 +85,7 @@ int main(int argc, char** argv){
   ros::init(argc, argv, "ArmController");
   ArmController arm_controller = ArmController();
   //boost::shared_ptr<squirrel_control::BaseController> base_controller_(new squirrel_control::BaseController(nh_));
-  ros::Subscriber PosCommandSub_ = arm_controller.nh_.subscribe("/arm/joint_trajectory_controller/follow_joint_trajectory/goal", 1, &ArmController::PosCommandSub_cb, &arm_controller);
+  ros::Subscriber PosCommandSub_ = arm_controller.nh_.subscribe("joint_trajectory_controller/follow_joint_trajectory/goal", 1, &ArmController::PosCommandSub_cb, &arm_controller);
   ros::spin();
   return 0;
 }
