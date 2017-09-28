@@ -49,7 +49,7 @@ The code has been adapted to follow ROS standards, in terms of topics published 
 
 ## Note on autostart
 
-The code in this folder defines the ROS_MASTER_URI to http://10.42.0.1:11311 which i had defined as robotino.
+The code in this folder defines the ROS_MASTER_URI to http://robotino:11311 which i had defined as robotino.
 
 In order to test this package the ros master may be running on the raspberry.
 

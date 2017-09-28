@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 
 <launch>
+	<rosparam command="load" file="$(find squirrel_interaction)/cfg/squirrel_interaction.yaml" />
 
-	<node name="screen" pkg="squirrel_interaction" type="raspberry_screen_server.py" />
-	<node name="speakers" pkg="squirrel_interaction" type="playsound.py" />
-	<node name="board" pkg="squirrel_interaction" type="board.py" />
-	<node name="teleop" pkg="squirrel_interaction" type="teleop.py" />
-
+	<node name="screen" pkg="squirrel_interaction" type="raspberry_screen_server.py" output="screen" />
+	<node name="speakers" pkg="squirrel_interaction" type="play_sound.py" output="screen" />
+	<node name="mouth" pkg="squirrel_interaction" type="mouth_speak.py" output="screen" />
+	<node name="teleop" pkg="squirrel_interaction" type="teleop.py" output="screen" />
+	<node name="joy" pkg="joy" type="joy_node" output="screen" />
 </launch>

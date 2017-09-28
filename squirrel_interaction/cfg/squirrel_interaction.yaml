@@ -1,0 +1,2 @@
+squirrel_port : '/dev/interactionboard'
+face_color : 'gold'
