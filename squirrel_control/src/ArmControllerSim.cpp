@@ -51,13 +51,18 @@
  ****************************************************************/
 #include <ros/ros.h>
 #include <trajectory_msgs/JointTrajectory.h>
+#include <nav_msgs/Odometry.h>
+#include <sensor_msgs/JointState.h>
 #include <squirrel_control/base_controller.h>
+#include <stdio.h>
 
 
 class ArmController{
 public:
   ros::NodeHandle nh_;
   void PosCommandSub_cb(const trajectory_msgs::JointTrajectory msg);
+  void Odometry_cb(const nav_msgs::Odometry msg);
+  ros::Publisher joint_state_pub;
   std::vector<double> current_pose;
   std::vector<double> command;
   std::vector<std::string> joint_names;
@@ -89,10 +94,30 @@ void ArmController::PosCommandSub_cb(const trajectory_msgs::JointTrajectory msg)
   base_controller_->moveBase( cx+command_basex, cy+command_basey, ctheta+command_basez);
 }
 
+void ArmController::Odometry_cb(const nav_msgs::Odometry odom){
+  current_pose = base_controller_->getCurrentState();
+  joint_state_pub = nh_.advertise<sensor_msgs::JointState>("/base_extra/joint_states", 1);
+
+  sensor_msgs::JointState msg;
+  msg.header.stamp = ros::Time::now();
+  msg.name.resize(3);
+  msg.position.resize(3);
+  msg.velocity.resize(3);
+  msg.effort.resize(3);
+
+  msg.name = {"base_jointx","base_jointy","base_jointz"};
+  msg.position = {current_pose.at(0), current_pose.at(1), current_pose.at(2)};
+  msg.velocity = {0.0,0.0,0.0};
+  msg.effort = {0.0,0.0,0.0};
+
+  joint_state_pub.publish(msg); 
+}
+
 int main(int argc, char** argv){
   ros::init(argc, argv, "ArmController");
   ArmController arm_controller = ArmController();
   ros::Subscriber PosCommandSub_ = arm_controller.nh_.subscribe("joint_trajectory_controller/command", 1, &ArmController::PosCommandSub_cb, &arm_controller);
+  ros::Subscriber OdomSub_ = arm_controller.nh_.subscribe("/odom", 1, &ArmController::Odometry_cb, &arm_controller);
   ros::spin();
   return 0;
 }
