@@ -34,6 +34,7 @@ namespace squirrel_control {
 		error += !rosparam_shortcuts::get(name_, rpnh, "ignore_base", ignore_base);
 		rosparam_shortcuts::shutdownIfError(name_, error);
 		motor_interface_ = new motor_control::MotorUtilities();
+        last_base_write_ = ros::Time::now();
 		safety_sub_ = rpnh.subscribe("/squirrel_safety", 10, &SquirrelHWInterface::safetyCallback, this);
 		safety_reset_sub_ = rpnh.subscribe("/squirrel_safety/reset", 10, &SquirrelHWInterface::safetyResetCallback, this);
         //ignore_base_sub_ = rpnh.subscribe("/arm_controller/joint_trajectory_controller/command", 10, &SquirrelHWInterface::ignoreBaseCallback, this); //FixMe: dont use global namespaces
@@ -413,6 +414,7 @@ namespace squirrel_control {
 
 
 	void SquirrelHWInterface::write(ros::Duration &elapsed_time) {
+      std::cout << "------ Write called!" << std::endl;
 		//This for that the robot keeps its initial pose and does not move back to 0 (deault initialization of C++ for class members)
 		if(!safety_lock_) {
 
@@ -509,8 +511,9 @@ namespace squirrel_control {
 			}
 
 			try {
-//				std::cout << "Arm: " << cmds[0] << " " << cmds[1] << " " << cmds[2] << " " << cmds[3] << " " << cmds[4] << std::endl;
+                std::cout << "Arm: " << cmds[0] << " " << cmds[1] << " " << cmds[2] << " " << cmds[3] << " " << cmds[4] << std::endl;
 				motor_interface_->write(cmds);
+                std::cout << (ros::Time::now() - last_base_write_).toSec() << std::endl;
                 if((ros::Time::now() - last_base_write_).toSec() > MIN_TIME_BETWEEN_BASE_WRITES) {
 					// std::cout << "NOT IGNORING BASE" << std::endl;
                     std::cout << "Base: " << base_cmds.at(0) << " " <<  base_cmds.at(1) << " " <<  base_cmds.at(2) << std::endl;
