@@ -8,15 +8,14 @@
 #include <algorithm>
 #include <unistd.h>
 
-std::vector<double> base_cmds(3);
-
 namespace squirrel_control {
 	SquirrelHWInterface::SquirrelHWInterface(ros::NodeHandle &nh, urdf::Model *urdf_model)
 		: name_("squirrel_hw_interface")
 		  , nh_(nh)
 		  , use_rosparam_joint_limits_(false)
 		  , use_soft_limits_if_available_(false)
-		  , base_controller_(nh, 100.0)
+          	  , base_controller_(nh, 100.0)
+          	  , base_cmds(3)
 	{
 		// Check if the URDF model needs to be loaded
 		if (urdf_model == NULL)
@@ -35,9 +34,10 @@ namespace squirrel_control {
 		error += !rosparam_shortcuts::get(name_, rpnh, "ignore_base", ignore_base);
 		rosparam_shortcuts::shutdownIfError(name_, error);
 		motor_interface_ = new motor_control::MotorUtilities();
+        	last_base_write_ = ros::Time::now();
 		safety_sub_ = rpnh.subscribe("/squirrel_safety", 10, &SquirrelHWInterface::safetyCallback, this);
 		safety_reset_sub_ = rpnh.subscribe("/squirrel_safety/reset", 10, &SquirrelHWInterface::safetyResetCallback, this);
-		ignore_base_sub_ = rpnh.subscribe("/arm_controller/joint_trajectory_controller/command", 10, &SquirrelHWInterface::ignoreBaseCallback, this); //FixMe: dont use global namespaces
+        	//ignore_base_sub_ = rpnh.subscribe("/arm_controller/joint_trajectory_controller/command", 10, &SquirrelHWInterface::ignoreBaseCallback, this); //FixMe: dont use global namespaces
 		base_interface_ = rpnh.advertise<geometry_msgs::Twist>("/cmd_rotatory", 1);
 		base_state_ = rpnh.subscribe("/odom", 10, &SquirrelHWInterface::odomCallback, this);
 	}
@@ -460,7 +460,13 @@ namespace squirrel_control {
 					// base_cmds[i] = joint_position_command_[i];
 					// }
 					for(int i=0; i<joint_names_.size(); ++i) {
-						if (joint_names_[i] == "arm_joint1") {
+                        			if (joint_names_[i] == "base_jointx") {
+                            				base_cmds[0] = joint_position_command_[i];
+                        			} else if (joint_names_[i] == "base_jointy") {
+                            				base_cmds[1] = joint_position_command_[i];
+                        			} else if (joint_names_[i] == "base_jointz") {
+                            				base_cmds[2] = joint_position_command_[i];
+                        			} else if (joint_names_[i] == "arm_joint1") {
 							cmds[0] = joint_position_command_[i];
 						} else if (joint_names_[i] == "arm_joint2") {
 							cmds[1] = joint_position_command_[i];
@@ -504,11 +510,12 @@ namespace squirrel_control {
 			}
 
 			try {
-//				std::cout << "Arm: " << cmds[0] << " " << cmds[1] << " " << cmds[2] << " " << cmds[3] << " " << cmds[4] << std::endl;
+                		//std::cout << "Arm: " << cmds[0] << " " << cmds[1] << " " << cmds[2] << " " << cmds[3] << " " << cmds[4] << std::endl;
 				motor_interface_->write(cmds);
-				if(!ignore_base) {
+                		//std::cout << (ros::Time::now() - last_base_write_).toSec() << std::endl;
+                		if((ros::Time::now() - last_base_write_).toSec() > MIN_TIME_BETWEEN_BASE_WRITES) {
 					// std::cout << "NOT IGNORING BASE" << std::endl;
-//					std::cout << "Base: " << base_cmds.at(0) << " " <<  base_cmds.at(1) << " " <<  base_cmds.at(2) << std::endl;
+                    			//std::cout << "Base: " << base_cmds.at(0) << " " <<  base_cmds.at(1) << " " <<  base_cmds.at(2) << std::endl;
 					if (current_mode_ == control_modes::POSITION_MODE) {
 						base_controller_.moveBase(base_cmds.at(0), base_cmds.at(1), base_cmds.at(2));
 					} else {
@@ -516,7 +523,7 @@ namespace squirrel_control {
 
 						base_interface_.publish(twist);			
 					}
-					ignore_base = true;
+                    			last_base_write_ = ros::Time::now();
 				}
 			} catch (std::exception &ex) {
 				throw_control_error(true, ex.what());

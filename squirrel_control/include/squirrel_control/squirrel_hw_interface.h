@@ -41,6 +41,7 @@ namespace squirrel_control {
 #define POSITION_JOINT_INTERFACE "hardware_interface::PositionJointInterface"
 #define VELOCITY_JOINT_INTERFACE "hardware_interface::VelocityJointInterface"
 #define EFFORT_JOINT_INTERFACE "hardware_interface::EffortJointInterface"
+#define MIN_TIME_BETWEEN_BASE_WRITES 0.25  // seconds
 
 	class SquirrelHWInterface : public hardware_interface::RobotHW {
 
@@ -187,6 +188,10 @@ namespace squirrel_control {
 			bool hold = true;
 			bool ignore_base = false;
 			ros::Subscriber ignore_base_sub_;
+
+			// Throttle the base
+            		std::vector<double> base_cmds;
+            		ros::Time last_base_write_;
 
 
 	};
