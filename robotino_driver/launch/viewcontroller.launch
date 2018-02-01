@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+
+<rosparam param="default_pan"> 0.0 </rosparam>
+<rosparam param="default_tilt"> -0.5 </rosparam>
+
+<node name="squirrel_view_controller" pkg="robotino_driver" type="squirrel_view_controller" output="screen" />
+</launch>

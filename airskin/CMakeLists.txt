@@ -7,6 +7,7 @@ project(airskin)
 find_package(catkin REQUIRED
   roscpp
   std_msgs
+  visualization_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,6 +105,7 @@ catkin_package(
   CATKIN_DEPENDS
   roscpp
   std_msgs
+  visualization_msgs
 #  DEPENDS system_lib
 )
 

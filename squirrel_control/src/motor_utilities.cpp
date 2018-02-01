@@ -116,6 +116,7 @@ namespace motor_control {
       if(comm != 0) {
 	std::cout << "Failed to loosen brakes for motor " << static_cast<int>(motor.id) << " (" << motor.tool->model_name_ << ")" << std::endl;
       }
+
     }
     motors_ready_ = true;
     std::cout << "Motors started." << std::endl;

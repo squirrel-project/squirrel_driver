@@ -22,6 +22,18 @@ mode_id = 3, open hand
 mode_id = 4, switch hand configuration from the upper workspace to lower workspace
 mode_id = 5, switch hand configuration from the lower workspace to upper workspace
 mode_id = 6, print hand motor enable status
+mode_id = 9, fold hand
+
+
+So when launching the hand, please run the services with the following sequences 
+1. mode_id = 3, open hand. 
+2. mode_id = 5, switch hand configuration from the lower workspace to upper workspace 
+3. mode_id = 3, open hand.  （for preparing a grasp）
+4. mode_id = 2, close hand.  （grasp）
+
+when folding the hand, just use 
+mode_id = 9, fold hand
+
 
 
 ### 2. Finger position control

@@ -58,6 +58,7 @@ class Controller(object):
         """ Moves motor [param 0] to position [param 1] degrees """
         degrees = _valid_destination(motor, degrees)
         self._mutex.acquire()
+	response=bytearray()
         try:
             message = bytearray(2)
             # simple bitwise operations to split an integer into 2 bytes
@@ -90,6 +91,7 @@ class Controller(object):
 
     def stop_motor(self, motor):
         """ Stops motor [param 0] """
+        response=bytearray()
         try:
 	    self._mutex.acquire()
             self.serial.reset_input_buffer()
@@ -103,6 +105,7 @@ class Controller(object):
 
     def start_motor(self, motor):
         """ Allows motor [param 0] to move again. By default, motors can move """
+	response=bytearray()
         try:
             index = _MOTORS.index(motor)
 	    self._mutex.acquire()
@@ -118,6 +121,7 @@ class Controller(object):
     def get_position(self, motor):
         """ Get motor [param 0] position in degrees """
         self._mutex.acquire()
+	response=bytearray(4)
         try:
             self.serial.reset_input_buffer()
 	    self.serial.write([
@@ -132,7 +136,6 @@ class Controller(object):
         finally:
             self._mutex.release()
             return - (response[2] - response[3])
-
     def get_positions(self):
         """ Fetches all motor positions """
         return [self.get_position("head"), self.get_position("neck"), self.get_position("camera")]
@@ -155,6 +158,7 @@ class Controller(object):
 
     def start_base_led_colors(self, number_of_leds):
         self._mutex.acquire()
+	response = bytearray()
         try:
             self.serial.write([0x34, number_of_leds])
 	    response = self._check_response(4, 0x34)
@@ -166,6 +170,7 @@ class Controller(object):
 
     def set_base_led_colors(self, colors):
         """sets the rgb value for each base led (42 max)"""
+	response = []
         if len(colors) != _NUMBER_OF_BASE_LEDS * 3:
             return 'Need RGB values (0-255, 0-255, 0-255) for each Base LED (%d)' % _NUMBER_OF_BASE_LEDS
         colors_ = map(_limit_color, colors)
@@ -182,6 +187,7 @@ class Controller(object):
 
     def get_door_status(self):
         self._mutex.acquire()
+	response = []
         try:
             self.serial.reset_input_buffer()
             self.serial.write([
@@ -203,8 +209,8 @@ class Controller(object):
             return response
 
     def _check_response(self, number_of_bytes_to_read, should_be):
+        response = bytearray()
         try:
-            response = bytearray()
             response.extend(self.serial.read(number_of_bytes_to_read))
             return response[0] == should_be
         except SerialException:
@@ -217,7 +223,7 @@ def _limit_color(color_value):
 
 def _valid_destination(motor, degrees):
     if motor in ['head', 'neck']:
-        return max(-180, min(180, degrees))
+        return max(-50, min(50, degrees))
     if motor == 'camera':
         return max(-68, min(30, degrees))
     if motor == 'door':

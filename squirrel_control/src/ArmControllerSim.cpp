@@ -86,7 +86,7 @@ void ArmController::PosCommandSub_cb(const trajectory_msgs::JointTrajectory msg)
     }
   }
     
-  base_controller_->moveBase( cx+command_basex, cy+command_basey, ctheta+command_basez);
+  base_controller_->moveBase( command_basex, command_basey, command_basez);
 }
 
 int main(int argc, char** argv){

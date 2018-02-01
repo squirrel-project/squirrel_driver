@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=Start Squirrel Interaction
-Exec=/home/pi/.config/autostart/squirrel_interaction.sh
+#Exec=/home/pi/.config/autostart/squirrel_interaction.sh
+Exec=/home/control/catkin_ws/src/squirrel_driver/squirrel_interaction/resources/autostart/squirrel_interaction.sh
 

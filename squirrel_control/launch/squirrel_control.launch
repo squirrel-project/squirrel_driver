@@ -1,5 +1,5 @@
 <launch>
-    <arg name="robot" default="tuw-robotino2"/>
+    <arg name="robot" default="uibk-robotino2"/>
     <param name="robot_description" command="$(find xacro)/xacro.py '$(find robotino_bringup)/robots/$(arg robot)/urdf/robotino.urdf.xacro'" /> 
 
     <arg name="use_robotino_safety" value="true" />

@@ -9,6 +9,7 @@
 #include <vector>
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
+#include <visualization_msgs/Marker.h>
 #include <airskin/kbhit.h>
 #include <airskin/Except.h>
 #include <airskin/I2C_Master_Devantech_ISS.h>
@@ -221,9 +222,11 @@ class AirSkinNode
 {
   ros::NodeHandle nh;
   ros::Publisher bump_pub;
+  ros::Publisher marker_pub;
   string device_file_name;
   I2C_Master *i2c_master;
   vector<Sensor*> sensors;
+  bool is_activated;
   bool airskin_ok;
 
 public:  
@@ -231,6 +234,12 @@ public:
   ~AirSkinNode();
   void init();
   void run();
+  /**
+   * Update rviz visualisation marker.
+   * To be called when activation status changes. If activated, then it will display
+   * some text above the robotthe robot.
+   */
+  void updateDisplayActivated();
 };
 
 AirSkinNode::AirSkinNode()
@@ -264,6 +273,7 @@ AirSkinNode::AirSkinNode()
       ok_cnt++;
   }
   airskin_ok = (ok_cnt == sensors.size());
+  is_activated = false;
 }
 
 AirSkinNode::~AirSkinNode()
@@ -276,13 +286,13 @@ AirSkinNode::~AirSkinNode()
 void AirSkinNode::init()
 {
   bump_pub = nh.advertise<std_msgs::Bool>("arm_bumper", 1);
+  marker_pub = nh.advertise<visualization_msgs::Marker>("visualisation", 1);
   ROS_INFO("arm skin is ready");
 }
 
 void AirSkinNode::run()
 {
   ros::Rate r(10);
-  bool isActivated = false;
 
   while(ros::ok() && airskin_ok)
   {
@@ -296,18 +306,20 @@ void AirSkinNode::run()
 
     if(anyActivated)
     {
-      if(!isActivated)
+      if(!is_activated)
       {
-        isActivated = true;
+        is_activated = true;
         ROS_INFO("arm skin pressed");
+        updateDisplayActivated();
       }
     }
     else
     {
-      if(isActivated)
+      if(is_activated)
       {
-        isActivated = false;
+        is_activated = false;
         ROS_INFO("arm skin released");
+        updateDisplayActivated();
       }
     }
 
@@ -321,6 +333,42 @@ void AirSkinNode::run()
 
   if(!airskin_ok)
     ROS_ERROR("Airskin is damaged");
+}
+
+void AirSkinNode::updateDisplayActivated()
+{
+  visualization_msgs::Marker marker;
+  marker.header.stamp = ros::Time::now();
+  marker.header.frame_id = "/base_link";
+  marker.ns = "airskin";
+  marker.id = 0;
+  marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;    
+  marker.lifetime = ros::Duration();
+
+  marker.pose.position.x = 0;
+  marker.pose.position.y = 0;
+  marker.pose.position.z = 1.5;
+  marker.pose.orientation.x = 0.0;
+  marker.pose.orientation.y = 0.0;
+  marker.pose.orientation.z = 0.0;
+  marker.pose.orientation.w = 1.0;
+ 
+  marker.text = "ARM COLLISION";
+  marker.color.r = 1.0f;
+  marker.color.g = 0.0f;
+  marker.color.b = 0.0f;
+  marker.color.a = 1.0;
+  marker.scale.x = 0.5;
+  marker.scale.y = 0.5;
+  marker.scale.z = 0.5;
+
+
+  if(is_activated)
+    marker.action = visualization_msgs::Marker::ADD;
+  else
+    marker.action = visualization_msgs::Marker::DELETE;
+
+  marker_pub.publish(marker);
 }
 
 int main (int argc, char ** argv)

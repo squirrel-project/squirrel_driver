@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   roscpp
   std_srvs
+  dynamixel_msgs
   geometry_msgs
   sensor_msgs
   squirrel_view_controller_msgs
@@ -21,7 +22,7 @@ find_package(RobotinoAPI2 REQUIRED)
 
 catkin_package(
  INCLUDE_DIRS include
- CATKIN_DEPENDS nav_msgs robotino_msgs std_srvs squirrel_view_controller_msgs geometry_msgs image_transport pcl_conversions pcl_ros sensor_msgs std_msgs tf
+ CATKIN_DEPENDS nav_msgs robotino_msgs std_srvs dynamixel_msgs squirrel_view_controller_msgs geometry_msgs image_transport pcl_conversions pcl_ros sensor_msgs std_msgs tf
 )
 
 include_directories(
@@ -50,6 +51,19 @@ add_executable(
   src/RobotinoNode.cpp)
 target_link_libraries(robotino_driver ${REC_ROBOTINO_API2_LIBRARY} ${catkin_LIBRARIES})
 add_dependencies(robotino_driver robotino_msgs_gencpp)
+
+add_executable(robotino_tilt_controller
+  src/tilt_controller_node.cpp
+  src/TiltControllerNode.cpp)
+target_link_libraries(robotino_tilt_controller ${catkin_LIBRARIES})
+add_dependencies(robotino_tilt_controller robotino_msgs_gencpp)
+
+add_executable(
+  robotino_pan_controller
+  src/pan_controller_node.cpp
+  src/PanControllerNode.cpp)
+target_link_libraries(robotino_pan_controller ${catkin_LIBRARIES})
+add_dependencies(robotino_pan_controller robotino_msgs_gencpp)
 
 add_executable(
   squirrel_view_controller

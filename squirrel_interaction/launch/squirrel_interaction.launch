@@ -7,6 +7,6 @@
 	<node name="speakers" pkg="squirrel_interaction" type="play_sound.py" output="screen" />
 	<node name="board" pkg="squirrel_interaction" type="board.py" output="screen" />
 	<node name="mouth" pkg="squirrel_interaction" type="mouth_speak.py" output="screen" />
-	<node name="teleop" pkg="squirrel_interaction" type="teleop.py" output="screen" />
-	<node name="joy" pkg="joy" type="joy_node" output="screen" />
+	<!-- <node name="teleop" pkg="squirrel_interaction" type="teleop.py" output="screen" /> -->
+	<!-- <node name="joy" pkg="joy" type="joy_node" output="screen" /> -->
 </launch>

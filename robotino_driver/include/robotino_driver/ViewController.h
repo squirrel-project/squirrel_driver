@@ -60,7 +60,7 @@ protected:
   ros::ServiceClient rel_tilt_client_;
   ros::ServiceClient update_joint_states;
 
-  float default_pan_, default_tilt_;
+  double default_pan_, default_tilt_;
   float pan_, tilt_;
   std::string who_fixed_it;
 

@@ -781,6 +781,10 @@ bool KCLHandController::closingHandForGrasing()
   ros::Rate r(MOVE_HAND_LOOP_FREQ);
   if(!hand_is_initialized_)
     return false; 
+
+  // Michael Zillich: enable only once
+  for(node_id = 0; node_id<motor_num; node_id++) 
+    joints_motor_[node_id].enableMotor();
  
   while(at_target_num < NUM_JOINTS)
   { 
@@ -788,7 +792,8 @@ bool KCLHandController::closingHandForGrasing()
     for(node_id = 0; node_id<motor_num; node_id++) 
     { 
       double target = hand_grasping_target[node_id];
-      bool enable_motor = joints_motor_[node_id].enableMotor();
+      // Michael Zillich: why enable in _each_ iteration?
+      // bool enable_motor = joints_motor_[node_id].enableMotor();
       ROS_INFO("joint ID: %d, current joint position: %.1f, motor current: %.1f", node_id, joints_sensor_[node_id].getSensorCalibratedValueDeg(), joints_motor_[node_id].getCurrent());     
       if_at_target = joints_motor_[node_id].moveToTarget(joints_sensor_[node_id].getSensorCalibratedValueRad(), deg_to_rad(target));     
       
@@ -812,14 +817,19 @@ bool KCLHandController::closingHandForGrasing()
     {
       for(node_id = 0; node_id<motor_num; node_id++) 
       {
+        /* Michael Zillich: Why enable the already enabled motors in case of a timeout?
+         * And why do it twice?
+         * We probably rather want to disable in such a case, as happens in moveHandToTarget()
         bool enable_motor = joints_motor_[node_id].enableMotor();
         if(!enable_motor) 
-          enable_motor = joints_motor_[node_id].enableMotor();
+          enable_motor = joints_motor_[node_id].enableMotor();*/
         joints_motor_[node_id].haltVelocityMovement();
+        bool disable_motor = joints_motor_[node_id].disableMotor();
       } 
       
       at_target_num = 6;
       ROS_INFO("Time out");
+      return false;
     }
 
     ROS_INFO("at target value is %d, time out is %d",at_target_num, timeout);
@@ -1170,8 +1180,9 @@ void KCLHandController::jointSensorValueCB(const std_msgs::Int16MultiArray::Cons
   // Whenever we get a position update, we also want a current/effort update.
   // joint_mutex_.lock();
   sensor_msgs::JointState joint_state;
+
+  joint_state.header.stamp = ros::Time::now();
   joint_state.position.resize(NUM_JOINTS);
-  
   for(unsigned int i = 0; i < NUM_JOINTS; i++)
   {
     joints_sensor_[i].sensorCalibratedValueUpdate(msg->data[i]);

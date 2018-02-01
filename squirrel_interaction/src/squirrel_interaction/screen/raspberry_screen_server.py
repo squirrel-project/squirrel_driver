@@ -56,9 +56,10 @@ def main():
     img_file= "{}/resources/media/images/{}/{}.png".format(PATH, "gold", "look_down")
     rospy.loginfo("Ready to display on screen")
 
-    r = rospy.Rate(30)
+    r = rospy.Rate(1)
     while not rospy.is_shutdown():
         image = cv2.imread(img_file)
+        image = cv2.resize(image, (1280,720))
         cv2.imshow('image', image)
         cv2.waitKey(20)
         r.sleep()

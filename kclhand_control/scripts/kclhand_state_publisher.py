@@ -27,9 +27,11 @@ class kclhand_state_publisher(object):
 
     def active_joint_callback(self, msg):
         # NOTE: kclhand_fingertip_state needs angles in degrees (though internally uses radians anyway ..)
-        joint_values_deg = range(0, len(msg.position))
-        for i in range(0, len(joint_values_deg)):
-            joint_values_deg[i] = m.degrees(msg.position[i])
+        #joint_values_deg = range(0, len(msg.position))
+        #for i in range(0, len(joint_values_deg)):
+        #    joint_values_deg[i] = m.degrees(msg.position[i])
+        # NOTE: active joint state is given in degrees, not radians
+        joint_values_deg = msg.position
         # NOTE: The minuses are right just so. It's an odd artefact of how handFK defines directions.
         fingertip_state = kclhand.HandFK(palmJointA = joint_values_deg[0],
                                          palmJointE = joint_values_deg[1],
