@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 __author__ = 'jiesun'
 #Date: 11 Oct. 2015
 #Email: jie.sun@kcl.ac.uk
@@ -130,7 +131,7 @@ class HandFK (Palm):
     deltaMiddle = m.radians(60) # for middle finger
     deltaSide = m.radians(20) # for side finger
 
-    upperFingerPreBending = m.pi/4
+    upperFingerPreBending = m.pi/4.
     fingerRadio = 3.0/7.0
 
 
@@ -144,9 +145,9 @@ class HandFK (Palm):
         #self.middleFingerUpper = self.middleFingerLower * self.fingerRadio - m.pi/12
         #self.leftFingerUpper = self.leftFingerLower * self.fingerRadio - m.pi/6
         #self.rightFingerUpper = self.rightFingerLower * self.fingerRadio + m.pi/6
-        self.middleFingerUpper = self.middleFingerLower * self.fingerRadio + m.radians(90 * 3/7) - m.pi/4
-        self.leftFingerUpper = self.leftFingerLower * self.fingerRadio + m.radians(90 * 3/7) - m.pi/4
-        self.rightFingerUpper = self.rightFingerLower * self.fingerRadio + m.radians(90 * 3/7) - m.pi/4
+        self.middleFingerUpper = self.middleFingerLower * self.fingerRadio + m.radians(90. * 3/7) - m.pi/16
+        self.leftFingerUpper = self.leftFingerLower * self.fingerRadio + m.radians(90. * 3/7) - m.pi/4
+        self.rightFingerUpper = self.rightFingerLower * self.fingerRadio + m.radians(90. * 3/7) - m.pi/4
 
     def middleFinger(self):
         self.middleR1 = self.rotation_y(self.deltaMiddle)
